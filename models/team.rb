@@ -1,7 +1,7 @@
 require( 'pg' )
 require( 'pry-byebug' )
 require_relative('../db/sql_runner')
-# require_relative('pokemon')
+require_relative('match')
 
 class Team 
 
@@ -28,10 +28,15 @@ class Team
     runner.run(sql)
   end
 
-  # def matches()
-  #   sql = "SELECT m.* FROM matches m INNER JOIN teams t ON t.matches_id = t.id WHERE pokemon_id = #{@id}"
-  #   return Trainer.map_items( sql, @runner )
-  # end  
+  def home_matches()
+    sql = "SELECT * FROM matches WHERE home_team_id = #{@id};"
+    return Match.map_matches(sql)
+   end
+
+  def away_matches()
+    sql = "SELECT * FROM matches WHERE away_team_id = #{@id};"
+    return Match.map_matches(sql)
+   end
 
   def self.map_items(sql, runner)
     teams = runner.run( sql )

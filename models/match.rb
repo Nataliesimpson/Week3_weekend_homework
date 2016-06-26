@@ -1,19 +1,11 @@
 require( 'pg' )
 require( 'pry-byebug' )
 require_relative('../db/sql_runner')
-# require_relative('pokemon')
+require_relative('team')
 
 class Match
 
   attr_reader( :id, :name )
-
-  # CREATE TABLE matches (
-  #   id SERIAL4 primary key,
-  #   home_team_id INT4 references teams(id),
-  #   away_team_id INT4 references teams(id),
-  #   home_team_score INT2,
-  #   away_team_score INT2 
-  # );
 
   def initialize( options, runner )
     @id = options['id'].to_i
@@ -24,7 +16,6 @@ class Match
     @runner = runner
   end
 
-#add home_team_id & away_team_id
   def save()
     sql = "INSERT INTO matches (home_team_id, away_team_id, home_team_score, away_team_score) VALUES ('#{ @home_team_id }', '#{ @away_team_id }', #{ @home_team_score}, #{@away_team_score}) RETURNING *"
     return Match.map_item(sql, @runner)
@@ -40,10 +31,15 @@ class Match
     runner.run(sql)
   end
 
-  # def teams()
-  #   sql = "SELECT t.* FROM trainers t INNER JOIN ownedpokemons o ON o.trainer_id = t.id WHERE pokemon_id = #{@id}"
-  #   return Team.map_items( sql, @runner )
-  # end  
+  def home_team()
+    sql = "SELECT t.* FROM teams t INNER JOIN matches m ON t.id = m.home_team_id WHERE m.id = #{@id};"
+    return Team.map_team(sql)
+  end
+
+  def away_team()
+    sql = "SELECT t.* FROM teams t INNER JOIN matches m ON t.id = m.away_team_id WHERE m.id = #{@id};"
+    return Team.map_team(sql)
+  end
 
   def self.map_items(sql, runner)
     matches = runner.run( sql )
@@ -55,6 +51,18 @@ class Match
     result = Match.map_items(sql, runner)
     return result.first
   end  
+
+  def match_winner()
+    result = case
+         when home_team_score > away_team_score
+           home_team_id
+         when away_team_score > home_team_score
+           away_team_id
+         else
+           false
+          end
+       return result
+  end
 
 end
 

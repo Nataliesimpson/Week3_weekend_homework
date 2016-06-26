@@ -6,8 +6,9 @@ require( 'pry-byebug' )
 
 runner = SqlRunner.new({dbname: 'dodgeball_league', host: 'localhost'})
 
-# Team.delete_all(runner)
-# Match.delete_all(runner)
+Match.delete_all(runner)
+Team.delete_all(runner)
+
 
 team1 = Team.new({'name' => 'Ballin'}, runner)
 t1 = team1.save
@@ -17,8 +18,8 @@ team3 = Team.new({'name' => 'Daj Mabal'}, runner)
 t3 = team3.save
 team4 = Team.new({'name' => 'The Mother Duckers'}, runner)
 t4 = team4.save
-# team5 = Team.new({'name' => 'Dodger Moore'}, runner)
-# t5 = team5.save
+team5 = Team.new({'name' => 'Dodger Moore'}, runner)
+t5 = team5.save
 
 
 match1 = Match.new({'home_team_id' => t1.id, 'away_team_id' => t2.id, 'home_team_score' => '1', 'away_team_score' => '2'}, runner)
