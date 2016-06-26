@@ -28,15 +28,20 @@ class Team
     runner.run(sql)
   end
 
+  def update()
+    sql = "UPDATE teams SET name = '#{@name}' WHERE id = #{@id}"
+    runner.run(sql)
+  end
+
   def home_matches()
-    sql = "SELECT * FROM matches WHERE home_team_id = #{@id};"
-    return Match.map_matches(sql)
-   end
+    sql = "SELECT * FROM matches WHERE home_team_id = #{@id}"
+    return Match.map_items(sql, @runner)
+  end
 
   def away_matches()
-    sql = "SELECT * FROM matches WHERE away_team_id = #{@id};"
-    return Match.map_matches(sql)
-   end
+    sql = "SELECT * FROM matches WHERE away_team_id = #{@id}"
+    return Match.map_itemss(sql, @runner)
+  end
 
   def self.map_items(sql, runner)
     teams = runner.run( sql )

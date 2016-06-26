@@ -31,6 +31,12 @@ m3 = match3.save
 match4 = Match.new({'home_team_id' => t1.id, 'away_team_id' => t4.id, 'home_team_score' => '4', 'away_team_score' => '2'}, runner)
 m4 = match4.save
 
+t1.home_matches
+m2.away_team
+m1.match_winner
+m3.home_team.first.name
+m4.home_team
+
 
 binding.pry
 nil

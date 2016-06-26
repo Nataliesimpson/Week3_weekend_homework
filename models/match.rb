@@ -32,13 +32,13 @@ class Match
   end
 
   def home_team()
-    sql = "SELECT t.* FROM teams t INNER JOIN matches m ON t.id = m.home_team_id WHERE m.id = #{@id};"
-    return Team.map_team(sql)
+    sql = "SELECT t.* FROM teams t INNER JOIN matches m ON t.id = m.home_team_id WHERE m.id = #{@id}"
+    return Team.map_items(sql, @runner)
   end
 
   def away_team()
-    sql = "SELECT t.* FROM teams t INNER JOIN matches m ON t.id = m.away_team_id WHERE m.id = #{@id};"
-    return Team.map_team(sql)
+    sql = "SELECT t.* FROM teams t INNER JOIN matches m ON t.id = m.away_team_id WHERE m.id = #{@id}"
+    return Team.map_items(sql, @runner)
   end
 
   def self.map_items(sql, runner)
@@ -54,14 +54,14 @@ class Match
 
   def match_winner()
     result = case
-         when home_team_score > away_team_score
-           home_team_id
-         when away_team_score > home_team_score
-           away_team_id
-         else
-           false
-          end
-       return result
+    when @home_team_score > @away_team_score
+      return @home_team_id
+    when @away_team_score > @home_team_score
+      return @away_team_id
+    else
+      false
+    end
+      return result
   end
 
 end
